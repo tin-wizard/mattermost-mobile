@@ -158,8 +158,10 @@ export function blendColors(background: string, foreground: string, opacity: num
 
 const themeTypeMap: ThemeTypeMap = {
     Mattermost: 'denim',
+    TIN: 'denim',
     Organization: 'sapphire',
     'Mattermost Dark': 'indigo',
+    'TIN Dark': 'indigo',
     'Windows Dark': 'onyx',
     Denim: 'denim',
     Sapphire: 'sapphire',

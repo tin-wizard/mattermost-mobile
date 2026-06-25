@@ -283,14 +283,14 @@ describe('showDeviceNotTrustedAlert', () => {
         );
     });
 
-    it('should show alert with Mattermost as default when no site name available', async () => {
+    it('should show alert with TIN as default when no site name available', async () => {
         jest.mocked(getConfigValue).mockResolvedValue(undefined);
 
         await showDeviceNotTrustedAlert(serverUrl, undefined, 'en');
 
         expect(Alert.alert).toHaveBeenCalledWith(
-            'Blocked by Mattermost',
-            'Jailbroken or rooted devices are not trusted by Mattermost.',
+            'Blocked by TIN',
+            'Jailbroken or rooted devices are not trusted by TIN.',
             expect.any(Array),
             {cancelable: false},
         );
@@ -330,8 +330,8 @@ describe('showNotSecuredAlert', () => {
         [messages.blocked_by.id]: 'Blocked by {vendor}',
         [messages.not_secured_vendor_ios.id]: 'This device must be secured with biometrics or passcode to use {vendor}.\n\nGo to Settings > Face ID & Passcode.',
         [messages.not_secured_vendor_android.id]: 'This device must be secured with a screen lock to use {vendor}.',
-        [messages.not_secured_ios.id]: 'This device must be secured with biometrics or passcode to use Mattermost.\n\nGo to Settings > Face ID & Passcode.',
-        [messages.not_secured_android.id]: 'This device must be secured with a screen lock to use Mattermost.',
+        [messages.not_secured_ios.id]: 'This device must be secured with biometrics or passcode to use TIN.\n\nGo to Settings > Face ID & Passcode.',
+        [messages.not_secured_android.id]: 'This device must be secured with a screen lock to use TIN.',
         [messages.androidSettings.id]: 'Go to settings',
         [messages.logout.id]: 'Logout',
         [messages.exit.id]: 'Exit',
@@ -404,8 +404,8 @@ describe('showNotSecuredAlert', () => {
         await showNotSecuredAlert(serverUrl, undefined, 'en');
 
         expect(Alert.alert).toHaveBeenCalledWith(
-            'Blocked by Mattermost',
-            expect.stringContaining('Mattermost'),
+            'Blocked by TIN',
+            expect.stringContaining('TIN'),
             expect.any(Array),
             {cancelable: false},
         );
@@ -418,8 +418,8 @@ describe('showNotSecuredAlert', () => {
         await showNotSecuredAlert(serverUrl, undefined, 'en');
 
         expect(Alert.alert).toHaveBeenCalledWith(
-            'Blocked by Mattermost',
-            expect.stringContaining('Mattermost'),
+            'Blocked by TIN',
+            expect.stringContaining('TIN'),
             expect.any(Array),
             {cancelable: false},
         );
@@ -576,13 +576,13 @@ describe('showBiometricFailureAlert', () => {
         );
     });
 
-    it('should use Mattermost as default when no site name available', async () => {
+    it('should use TIN as default when no site name available', async () => {
         jest.mocked(getConfigValue).mockResolvedValue(undefined);
 
         await showBiometricFailureAlert(serverUrl, false, undefined, 'en');
 
         expect(Alert.alert).toHaveBeenCalledWith(
-            'Blocked by Mattermost',
+            'Blocked by TIN',
             'Biometric or Passcode authentication failed.',
             expect.any(Array),
             {cancelable: false},

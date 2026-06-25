@@ -91,7 +91,7 @@ const getStyleSheet = makeStyleSheetFromTheme((theme) => {
 });
 
 const TermsOfService = ({
-    siteName = 'Mattermost',
+    siteName = 'TIN',
     showToS,
 }: TermsOfServiceProps) => {
     const theme = useTheme();

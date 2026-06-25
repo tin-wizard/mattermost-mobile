@@ -3,7 +3,7 @@
 
 type LegacyThemeKey = 'default' | 'organization' | 'mattermostDark' | 'windows10';
 
-type LegacyThemeType = 'Mattermost' | 'Organization' | 'Mattermost Dark' | 'Windows Dark';
+type LegacyThemeType = 'Mattermost' | 'TIN' | 'Organization' | 'Mattermost Dark' | 'TIN Dark' | 'Windows Dark';
 
 type ThemeKey = 'denim' | 'sapphire' | 'quartz' | 'indigo' | 'onyx' | 'custom';
 

@@ -24,7 +24,7 @@ export const shareLogs = async (metadata: ReportAProblemMetadata, siteName: stri
         const logPaths = await TurboLogger.getLogPaths();
         const attachments = excludeLogs ? [] : logPaths.map((path) => pathWithPrefix('file://', path));
         await Share.open({
-            subject: `Problem with ${siteName || 'Mattermost'} mobile app`,
+            subject: `Problem with ${siteName || 'TIN'} mobile app`,
             email: reportAProblemMail,
             failOnCancel: false,
             urls: attachments.length ? attachments : undefined,
@@ -41,7 +41,7 @@ export const emailLogs = async (metadata: ReportAProblemMetadata, siteName: stri
         const attachments = excludeLogs ? [] : logPaths.map((path) => pathWithPrefix('file://', path));
         await Share.shareSingle({
             social: Share.Social.EMAIL as any, // The type is not correct in the library
-            subject: `Problem with ${siteName || 'Mattermost'} mobile app`,
+            subject: `Problem with ${siteName || 'TIN'} mobile app`,
             email: reportAProblemMail,
             urls: attachments.length ? attachments : undefined,
             message: buildEmailBody(metadata),
@@ -51,8 +51,12 @@ export const emailLogs = async (metadata: ReportAProblemMetadata, siteName: stri
     }
 };
 
-export const getDefaultReportAProblemLink = (isLicensed: boolean) => {
-    return isLicensed ? 'https://mattermost.com/pl/report_a_problem_licensed' : 'https://mattermost.com/pl/report_a_problem_unlicensed';
+export const getDefaultReportAProblemLink = (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isLicensed: boolean,
+) => {
+    // Parameter kept for API compatibility; no external support link configured for TIN.
+    return '';
 };
 
 export function metadataToString(metadata: ReportAProblemMetadata): string {

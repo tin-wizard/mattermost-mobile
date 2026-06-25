@@ -25,7 +25,7 @@ const getStyleSheet = makeStyleSheetFromTheme((theme) => {
 const messages = defineMessages({
     mattermost: {
         id: 'about.mattermost',
-        defaultMessage: 'Mattermost',
+        defaultMessage: 'TIN',
     },
     teamEditiont0: {
         id: 'about.teamEditiont0',

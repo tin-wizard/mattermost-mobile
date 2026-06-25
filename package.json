@@ -1,10 +1,10 @@
 {
-  "name": "mattermost-mobile",
+  "name": "tin-mobile",
   "version": "2.41.0",
-  "description": "Mattermost Mobile with React Native",
+  "description": "TIN Mobile with React Native",
   "main": "index.tsx",
   "repository": "git@github.com:mattermost/mattermost-mobile.git",
-  "author": "Mattermost, Inc.",
+  "author": "The Intelligent Network",
   "license": "Apache 2.0",
   "private": true,
   "engines": {

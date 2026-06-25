@@ -9,8 +9,8 @@ import {logError} from '@utils/log';
 
 const channelConfig = {
     id: 'calls_channel',
-    name: 'Mattermost',
-    description: 'Mattermost Calls microphone while app is in the background',
+    name: 'TIN',
+    description: 'TIN Calls microphone while app is in the background',
     enableVibration: false,
 };
 
@@ -23,8 +23,8 @@ export const foregroundServiceStart = async () => {
     const notificationConfig = {
         channelId: 'calls_channel',
         id: 345678,
-        title: 'Mattermost',
-        text: 'Mattermost Calls Microphone',
+        title: 'TIN',
+        text: 'TIN Calls Microphone',
         icon: '',
         button: 'Stop',
     };

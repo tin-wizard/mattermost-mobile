@@ -1,8 +1,8 @@
 {
-  "name": "Mattermost",
-  "displayName": "Mattermost",
+  "name": "TIN",
+  "displayName": "TIN",
   "expo": {
-    "scheme": "mattermost",
+    "scheme": "tin",
     "plugins": [
       "expo-router"
     ]

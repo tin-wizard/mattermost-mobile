@@ -788,7 +788,7 @@ class SecurityManagerSingleton {
             const shouldBlurOnAuthenticate = server === this.activeServer && this.isScreenCapturePrevented(server);
             try {
                 const auth = await Emm.authenticate({
-                    reason: translations[messages.securedBy.id].replace('{vendor}', siteName || config?.siteName || 'Mattermost'),
+                    reason: translations[messages.securedBy.id].replace('{vendor}', siteName || config?.siteName || 'TIN'),
                     fallback: true,
                     supressEnterPassword: true,
                     blurOnAuthenticate: shouldBlurOnAuthenticate,
