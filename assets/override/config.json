@@ -1,5 +1,5 @@
 {
-    "DefaultServerUrl": "https://www.tinconnect.com",
+    "DefaultServerUrl": "https://mattermost.tinconnect.com",
     "DefaultServerName": "The Intelligent Network",
     "AutoSelectServerUrl": true
 }
