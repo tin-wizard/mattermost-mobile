@@ -27,7 +27,7 @@ jest.mock('expo-application', () => {
         nativeApplicationVersion: '0.0.0',
         nativeBuildVersion: '0',
         applicationName: 'TIN',
-        applicationId: 'com.tin.mobile',
+        applicationId: 'io.tin.mobile',
     };
 });
 
@@ -45,7 +45,7 @@ jest.mock('expo-device', () => {
         deviceName: 'Device',
         osName: 'Test',
         osVersion: '0.0.0',
-        applicationId: 'com.tin.mobile',
+        applicationId: 'io.tin.mobile',
         isRootedExperimentalAsync: jest.fn().mockResolvedValue(false),
     };
 });

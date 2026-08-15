@@ -7,20 +7,20 @@ sideloading only.
 
 ## What's already in place
 - Team ID `PXAXE9BR4C` baked into `ios/Mattermost.xcodeproj/project.pbxproj`.
-- Bundle prefix `com.tin.mobile` (main app, NotificationService, MattermostShare).
-- App Group `group.com.tin.mobile` in entitlements and Info.plist.
+- Bundle prefix `io.tin.mobile` (main app, NotificationService, MattermostShare).
+- App Group `group.io.tin.mobile` in entitlements and Info.plist.
 - Display name `TIN Connect` in all four Info.plist files plus `app.json`.
 - `INTUNE_ENABLED: 'false'` so `prepare-ios-build` skips the intune submodule.
-- Fastlane defaults (`Fastfile`, `.env.ios.*`) updated to `com.tin.mobile` /
-  `group.com.tin.mobile` / `iCloud.com.tin.mobile`.
+- Fastlane defaults (`Fastfile`, `.env.ios.*`) updated to `io.tin.mobile` /
+  `group.io.tin.mobile` / `iCloud.io.tin.mobile`.
 
 ## Apple Developer Portal one-time setup
 1. Register three App IDs:
-   - `com.tin.mobile`
-   - `com.tin.mobile.NotificationService`
-   - `com.tin.mobile.MattermostShare`
+   - `io.tin.mobile`
+   - `io.tin.mobile.NotificationService`
+   - `io.tin.mobile.MattermostShare`
 2. Register one App Group:
-   - `group.com.tin.mobile`
+   - `group.io.tin.mobile`
 3. Register three Certificates:
    - Apple Distribution (main app)
    - Apple Distribution (NotificationService)
@@ -28,7 +28,7 @@ sideloading only.
 4. Generate three App Store Connect provisioning profiles that match the
    three App IDs.
 5. In App Store Connect (https://appstoreconnect.apple.com), create the
-   app record "TIN Connect" with bundle ID `com.tin.mobile` and primary
+   app record "TIN Connect" with bundle ID `io.tin.mobile` and primary
    language English.
 
 ## GitHub Secrets to set on `tindevelopers/mattermost-mobile`
@@ -52,13 +52,13 @@ mkdir mattermost-certificates && cd mattermost-certificates
 git init && git checkout -b main
 bundle exec fastlane match init
 bundle exec fastlane match appstore \
-  --app_identifier com.tin.mobile \
+  --app_identifier io.tin.mobile \
   --git_url git@github.com:tindevelopers/certs.git --readonly false
 bundle exec fastlane match appstore \
-  --app_identifier com.tin.mobile.NotificationService \
+  --app_identifier io.tin.mobile.NotificationService \
   --git_url git@github.com:tindevelopers/certs.git --readonly false
 bundle exec fastlane match appstore \
-  --app_identifier com.tin.mobile.MattermostShare \
+  --app_identifier io.tin.mobile.MattermostShare \
   --git_url git@github.com:tindevelopers/certs.git --readonly false
 ```
 

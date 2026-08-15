@@ -1,4 +1,4 @@
-package com.tin.mobile
+package io.tin.mobile
 
 import android.app.PendingIntent
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.tin.mobile;
+package io.tin.mobile;
 
 import com.wix.detox.Detox;
 import com.wix.detox.config.DetoxConfig;

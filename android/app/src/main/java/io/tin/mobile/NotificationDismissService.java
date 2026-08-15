@@ -1,4 +1,4 @@
-package com.tin.mobile;
+package io.tin.mobile;
 
 import android.content.Context;
 import android.content.Intent;

@@ -22,11 +22,11 @@
 	<true/>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.com.tin.mobile</string>
+		<string>group.io.tin.mobile</string>
 	</array>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)com.tin.mobile</string>
+		<string>$(AppIdentifierPrefix)io.tin.mobile</string>
 	</array>
 </dict>
 </plist>

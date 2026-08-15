@@ -102,7 +102,7 @@ android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdkVersion rootProject.ext.compileSdkVersion
-    namespace "com.tin.mobile"
+    namespace "io.tin.mobile"
 
     lintOptions {
         checkReleaseBuilds false
@@ -110,7 +110,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.tin.mobile"
+        applicationId "io.tin.mobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 767
