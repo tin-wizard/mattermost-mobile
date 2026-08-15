@@ -19,6 +19,11 @@ jobs:
         with:
           node-version: 24
 
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: false
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
