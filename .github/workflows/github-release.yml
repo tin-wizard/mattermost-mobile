@@ -52,14 +52,30 @@ jobs:
         env:
           TAG: "${{ env.RELEASE_TAG }}"
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          MATCH_REPO: "${{ secrets.MATCH_REPO }}"
           MATCH_PASSWORD: "${{ secrets.MATCH_PASSWORD }}"
           MATCH_TYPE: "${{ secrets.MATCH_TYPE }}"
-          MATCH_DEPLOY_KEY: "${{ secrets.MATCH_DEPLOY_KEY }}"
+          # fastlane match reads MATCH_GIT_PRIVATE_KEY for the SSH deploy key;
+          # the cert repo URL is already hardcoded in fastlane/Matchfile.
+          MATCH_GIT_PRIVATE_KEY: "${{ secrets.MATCH_DEPLOY_KEY }}"
           APP_STORE_CONNECT_API_KEY_ID: "${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}"
           APP_STORE_CONNECT_API_ISSUER_ID: "${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}"
           APP_STORE_CONNECT_API_KEY_FILE: "${{ secrets.APP_STORE_CONNECT_API_KEY_FILE }}"
           APP_NAME: 'TIN Connect'
+          # From .env.ios.tin-beta -- required by setup_code_signing and fastlane match
+          APP_SCHEME: mattermost
+          BRANCH_TO_BUILD: "${{ env.RELEASE_TAG }}"
+          BUILD_FOR_RELEASE: 'true'
+          MAIN_APP_IDENTIFIER: io.tin.mobile
+          EXTENSION_APP_IDENTIFIER: io.tin.mobile.MattermostShare
+          NOTIFICATION_SERVICE_IDENTIFIER: io.tin.mobile.NotificationService
+          IOS_APP_GROUP: group.io.tin.mobile
+          IOS_ICLOUD_CONTAINER: iCloud.io.tin.mobile
+          MATCH_APP_IDENTIFIER: io.tin.mobile.NotificationService,io.tin.mobile.MattermostShare,io.tin.mobile
+          MATCH_READONLY: 'true'
+          IOS_BUILD_EXPORT_METHOD: app-store
+          SYNC_PROVISIONING_PROFILES: 'true'
+          REPLACE_ASSETS: 'false'
+          SENTRY_ENABLED: 'false'
         run: bundle exec fastlane ios signed
         working-directory: ./fastlane
 
