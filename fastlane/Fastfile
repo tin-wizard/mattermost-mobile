@@ -804,7 +804,13 @@ platform :ios do
 
     sh "rm -rf #{ios_build_dir}/"
     sh "cd #{root_dir}/ios && xcodebuild -workspace Mattermost.xcworkspace -scheme Mattermost -configuration Release -parallelizeTargets CODE_SIGN_IDENTITY='' CODE_SIGNING_REQUIRED=NO SYMROOT='#{ios_build_dir}' #{more_xc_args} "
-    sh "cd #{ios_build_dir}/#{rel_build_dir} && zip -r #{output_file} Mattermost.app"
+
+    # The forked Xcode project sets PRODUCT_NAME = TIN on the main app target
+    # at ios/Mattermost.xcodeproj/project.pbxproj, so xcodebuild produces
+    # `TIN.app`, not `Mattermost.app`. Glob to stay robust against renames.
+    app_dir = Dir.glob("#{ios_build_dir}/#{rel_build_dir}/*.app").first
+    UI.user_error!("no .app bundle found in #{ios_build_dir}/#{rel_build_dir} after xcodebuild") if app_dir.nil?
+    sh "cd #{File.dirname(app_dir)} && zip -r #{output_file} #{File.basename(app_dir)}"
     sh "mv #{ios_build_dir}/#{rel_build_dir}/#{output_file} #{root_dir}"
   end
 

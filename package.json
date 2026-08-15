@@ -1,6 +1,6 @@
 {
   "name": "tin-mobile",
-  "version": "2.41.0-rc.4",
+  "version": "2.41.0-rc.5",
   "description": "TIN Mobile with React Native",
   "main": "index.tsx",
   "repository": "git@github.com:mattermost/mattermost-mobile.git",
