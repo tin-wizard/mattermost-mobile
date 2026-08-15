@@ -47,7 +47,7 @@ jobs:
           MATCH_GIT_URL: "${{ secrets.MM_MOBILE_MATCH_GIT_URL }}"
           MATCH_PASSWORD: "${{ secrets.MM_MOBILE_MATCH_PASSWORD }}"
           SENTRY_ENABLED: 'false'
-        run: bundle exec fastlane ios build --env ios.beta
+        run: bundle exec fastlane ios build --env ios.tin-beta
         working-directory: ./fastlane
 
       - name: ci/upload-ios-beta-build
