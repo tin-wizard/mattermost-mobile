@@ -55,3 +55,13 @@ jobs:
         with:
           name: ios-build-tin-${{ github.run_id }}
           path: "*.ipa"
+
+      - name: ci/deploy-testflight
+        env:
+          FASTLANE_TEAM_ID: "${{ secrets.MM_MOBILE_FASTLANE_TEAM_ID }}"
+          IOS_API_ISSUER_ID: "${{ secrets.MM_MOBILE_IOS_API_ISSUER_ID }}"
+          IOS_API_KEY: "${{ secrets.MM_MOBILE_IOS_API_KEY }}"
+          IOS_API_KEY_ID: "${{ secrets.MM_MOBILE_IOS_API_KEY_ID }}"
+          PILOT_SKIP_WAITING_FOR_BUILD_PROCESSING: 'true'
+        run: bundle exec fastlane ios deploy file:"${{ github.workspace }}/*.ipa" --env ios.tin-beta
+        working-directory: ./fastlane
