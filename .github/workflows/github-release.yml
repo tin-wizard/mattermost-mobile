@@ -26,7 +26,11 @@ jobs:
       - name: ci/test
         uses: ./.github/actions/test
 
+  # iOS unsigned build is disabled on the tindevelopers fork: the iOS signing
+  # pipeline needs MM_MOBILE_PRIVATE_DEPLOY_KEY and MM_MOBILE_INTUNE_DEPLOY_KEY
+  # secrets that only mattermost.com has. Android builds below still run.
   build-ios-unsigned:
+    if: ${{ false }}
     runs-on: macos-15-large
     needs:
       - test
@@ -191,5 +195,15 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
-          gh release create "${{ env.RELEASE_TAG }}" --title "${{ env.RELEASE_TAG }}" --notes "Release ${{ env.RELEASE_TAG }}" Mattermost-unsigned.ipa Mattermost-unsigned.apk
+          # The iOS job is disabled on the fork (see top of file); only the Android
+          # artifact is present, so we publish whatever we have.
+          set +e
+          FILES=()
+          [ -f Mattermost-unsigned.ipa ] && FILES+=(Mattermost-unsigned.ipa)
+          [ -f Mattermost-unsigned.apk ] && FILES+=(Mattermost-unsigned.apk)
+          if [ ${#FILES[@]} -eq 0 ]; then
+            echo "No artifacts available; skipping release creation."
+            exit 0
+          fi
+          gh release create "${{ env.RELEASE_TAG }}" --title "${{ env.RELEASE_TAG }}" --notes "Release ${{ env.RELEASE_TAG }}" "${FILES[@]}"
         working-directory: ./
