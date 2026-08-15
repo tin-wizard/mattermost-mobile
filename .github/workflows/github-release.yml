@@ -15,7 +15,7 @@ env:
   RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
   SNYK_VERSION: "1.1297.2"
   CYCLONEDX_VERSION: "v0.27.2"
-  INTUNE_ENABLED: 'true'
+  INTUNE_ENABLED: 'false'
 
 jobs:
   test:
@@ -26,11 +26,13 @@ jobs:
       - name: ci/test
         uses: ./.github/actions/test
 
-  # iOS unsigned build is disabled on the tindevelopers fork: the iOS signing
-  # pipeline needs MM_MOBILE_PRIVATE_DEPLOY_KEY and MM_MOBILE_INTUNE_DEPLOY_KEY
-  # secrets that only mattermost.com has. Android builds below still run.
+  # iOS unsigned build is now enabled on the tindevelopers fork to support
+  # App Store Connect distribution. Run unsigned today; signing + TestFlight
+  # upload are not yet wired because the fork does not have Mattermost.com's
+  # MM_MOBILE_PRIVATE_DEPLOY_KEY (which gated access to the shared match repo).
+  # To enable App Store Connect signing, add the secrets listed in
+  # deploy/ios/app-store-connect.md and switch this job to fastlane ios.
   build-ios-unsigned:
-    if: ${{ false }}
     runs-on: macos-15-large
     needs:
       - test
@@ -38,16 +40,10 @@ jobs:
       - name: ci/checkout-repo
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: ci/setup-ssh-key
-        uses: ./.github/actions/setup-ssh-key
-        with:
-          ssh-private-key: ${{ secrets.MM_MOBILE_PRIVATE_DEPLOY_KEY }}
-
       - name: ci/prepare-ios-build
         uses: ./.github/actions/prepare-ios-build
         with:
           intune-enabled: ${{ env.INTUNE_ENABLED }}
-          intune-ssh-private-key: ${{ secrets.MM_MOBILE_INTUNE_DEPLOY_KEY }}
 
       - name: ci/build-ios-unsigned
         env:
