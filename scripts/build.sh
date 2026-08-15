@@ -86,14 +86,13 @@ function setup() {
         node "$GENERATE_GLYPH_MAP_SCRIPT"
 
         echo "Installing Fastane"
-        # Install gems into the repo's vendor/bundle so the GH Actions ubuntu-22.04
-        # runner (where /var/lib/gems/3.0.0 is owned by another user) doesn't hit
-        # "Permission denied @ dir_s_mkdir" when bundler tries to write its cache.
-        bundle config set --local path 'vendor/bundle' >/dev/null 2>&1 || true
         if !gem list bundler -i --version 2.5.11 > /dev/null 2>&1; then
           gem install --user-install bundler --version 2.5.11 || true
         fi
-        cd fastlane && bundle install && cd .. || exit 1
+        # --path vendor/bundle forces bundles into the working dir (fastlane/vendor/
+        # bundle/), avoiding the GH Actions ubuntu-22.04 /var/lib/gems permission
+        # errors we saw with the system-wide path.
+        cd fastlane && BUNDLE_PATH=vendor/bundle bundle install && cd .. || exit 1
     fi
 
     if [ "$1" = "android" ]; then
