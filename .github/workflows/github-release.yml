@@ -11,6 +11,9 @@ on:
         required: true
         type: string
 
+permissions:
+  contents: write
+
 env:
   RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
   SNYK_VERSION: "1.1297.2"
@@ -191,8 +194,14 @@ jobs:
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
-          # The iOS job is disabled on the fork (see top of file); only the Android
-          # artifact is present, so we publish whatever we have.
+          # The release.yml workflow creates a draft release as part of its
+          # build-android job via softprops/action-gh-release@v2, so by the time
+          # we get here a draft may already exist. Be idempotent:
+          #   - if assets are missing entirely, skip
+          #   - if a release already exists for this tag, upload only the
+          #     artifacts that aren't already attached (e.g. the iOS unsigned
+          #     ipa is uploaded only from this job)
+          #   - otherwise create the release with all available artifacts.
           set +e
           FILES=()
           [ -f Mattermost-unsigned.ipa ] && FILES+=(Mattermost-unsigned.ipa)
@@ -201,5 +210,12 @@ jobs:
             echo "No artifacts available; skipping release creation."
             exit 0
           fi
-          gh release create "${{ env.RELEASE_TAG }}" --title "${{ env.RELEASE_TAG }}" --notes "Release ${{ env.RELEASE_TAG }}" "${FILES[@]}"
+          if gh release view "${{ env.RELEASE_TAG }}" >/dev/null 2>&1; then
+            echo "Release ${{ env.RELEASE_TAG }} already exists; uploading any missing artifacts."
+            for f in "${FILES[@]}"; do
+              gh release upload "${{ env.RELEASE_TAG }}" "$f" --clobber
+            done
+          else
+            gh release create "${{ env.RELEASE_TAG }}" --title "${{ env.RELEASE_TAG }}" --notes "Release ${{ env.RELEASE_TAG }}" "${FILES[@]}"
+          fi
         working-directory: ./
