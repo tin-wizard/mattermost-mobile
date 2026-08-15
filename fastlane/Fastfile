@@ -451,6 +451,26 @@ platform :ios do
     )
   end
 
+  desc 'Build signed iOS ipa and upload to TestFlight'
+  lane :signed do |options|
+    UI.success('Building signed iOS app and uploading to TestFlight')
+
+    ENV['APP_NAME'] = options[:app_name] || ENV['APP_NAME'] || 'Mattermost Beta'
+    ENV['REPLACE_ASSETS'] = 'true'
+    ENV['BUILD_FOR_RELEASE'] = 'true'
+    ENV['APP_SCHEME'] = 'mattermost'
+    ENV['IOS_BUILD_EXPORT_METHOD'] ||= 'app-store'
+
+    update_settings
+    replace_assets
+
+    build_ios
+
+    ipa_name = "#{ENV['APP_NAME'].gsub(' ', '_')}.ipa"
+    UI.message("Submitting #{ipa_name} to TestFlight")
+    submit_to_testflight("./#{ipa_name}")
+  end
+
   lane :simulator do |options|
     UI.success('Building iOS app for simulator')
 
