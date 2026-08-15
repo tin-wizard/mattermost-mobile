@@ -1,6 +1,6 @@
 {
   "name": "TIN",
-  "displayName": "TIN",
+  "displayName": "TIN Connect",
   "expo": {
     "scheme": "tin",
     "plugins": [

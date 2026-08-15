@@ -49,8 +49,8 @@ after_all do |lane|
   if ENV['CI'] != 'true'
     if ENV['RESET_GIT_BRANCH'] == 'true'
       branch = ENV['BRANCH_TO_BUILD'] || 'main'
-      package_id = ENV['MAIN_APP_IDENTIFIER'] || 'com.mattermost.rnbeta'
-      beta_dir = '../android/app/src/main/java/com/mattermost/rnbeta'
+      package_id = ENV['MAIN_APP_IDENTIFIER'] || 'com.tin.mobile'
+      beta_dir = '../android/app/src/main/java/com/tin/mobile'
       release_dir = "../android/app/src/main/java/#{package_id.gsub '.', '/'}"
 
       if beta_dir != release_dir
@@ -501,9 +501,9 @@ platform :ios do
   lane :update_settings do
     # Configure Main app settings
     app_name = ENV['APP_NAME'] || 'Mattermost Beta'
-    app_bundle_id = ENV['MAIN_APP_IDENTIFIER'] || 'com.mattermost.rnbeta'
-    app_group_id = ENV['IOS_APP_GROUP'] || 'group.com.mattermost.rnbeta'
-    icloud_container = ENV['IOS_ICLOUD_CONTAINER'] || 'iCloud.com.mattermost.rnbeta'
+    app_bundle_id = ENV['MAIN_APP_IDENTIFIER'] || 'com.tin.mobile'
+    app_group_id = ENV['IOS_APP_GROUP'] || 'group.com.tin.mobile'
+    icloud_container = ENV['IOS_ICLOUD_CONTAINER'] || 'iCloud.com.tin.mobile'
     app_scheme = ENV['APP_SCHEME'] || 'mattermost'
     app_auth_scheme = get_auth_scheme
     keychain_group = "$(AppIdentifierPrefix)#{ENV["IOS_KEYCHAIN_GROUP"] || app_bundle_id}"
@@ -520,7 +520,7 @@ platform :ios do
 
     find_replace_string(
         path_to_file: './ios/Mattermost.xcodeproj/project.pbxproj',
-        old_string: 'com.mattermost.rnbeta',
+        old_string: 'com.tin.mobile',
         new_string: app_bundle_id
     )
 
@@ -545,7 +545,7 @@ platform :ios do
     )
 
     # Configure Share extension settings
-    extension_bundle_id = ENV['EXTENSION_APP_IDENTIFIER'] || 'com.mattermost.rnbeta.MattermostShare'
+    extension_bundle_id = ENV['EXTENSION_APP_IDENTIFIER'] || 'com.tin.mobile.MattermostShare'
     
     update_info_plist(
       xcodeproj: './ios/Mattermost.xcodeproj',
@@ -559,7 +559,7 @@ platform :ios do
 
     find_replace_string(
         path_to_file: './ios/Mattermost.xcodeproj/project.pbxproj',
-        old_string: 'com.mattermost.rnbeta.MattermostShare',
+        old_string: 'com.tin.mobile.MattermostShare',
         new_string: extension_bundle_id
     )
 
@@ -569,7 +569,7 @@ platform :ios do
     )
 
     # Configure Notification Service settings
-    notification_bundle_id = ENV['NOTIFICATION_SERVICE_IDENTIFIER'] || 'com.mattermost.rnbeta.NotificationService'
+    notification_bundle_id = ENV['NOTIFICATION_SERVICE_IDENTIFIER'] || 'com.tin.mobile.NotificationService'
     update_info_plist(
       xcodeproj: './ios/Mattermost.xcodeproj',
       plist_path: 'NotificationService/Info.plist',
@@ -587,7 +587,7 @@ platform :ios do
 
     find_replace_string(
         path_to_file: './ios/Mattermost.xcodeproj/project.pbxproj',
-        old_string: 'com.mattermost.rnbeta.NotificationService',
+        old_string: 'com.tin.mobile.NotificationService',
         new_string: notification_bundle_id
     )
 
@@ -628,7 +628,7 @@ platform :ios do
             ]
 
             plist["IntuneMAMSettings"] = {
-              "AppGroupIdentifiers" => [ENV['IOS_APP_GROUP'] || 'group.com.mattermost.rnbeta'],
+              "AppGroupIdentifiers" => [ENV['IOS_APP_GROUP'] || 'group.com.tin.mobile'],
               "MAMTelemetryDisabled" => true,
               "MultiIdentity" => true,
               "ADALLogOverrideDisabled" => true,
@@ -865,7 +865,7 @@ platform :android do
         stringsFile: './android/app/src/main/res/values/strings.xml'
     )
 
-    package_id = ENV['MAIN_APP_IDENTIFIER'] || 'com.mattermost.rnbeta'
+    package_id = ENV['MAIN_APP_IDENTIFIER'] || 'com.tin.mobile'
     android_change_package_identifier(newIdentifier: package_id, manifest: './android/app/src/main/AndroidManifest.xml')
     android_update_application_id(app_folder_name: 'android/app', application_id: package_id)
     android_update_namespace(app_folder_name: 'android/app', namespace: package_id)
@@ -887,7 +887,7 @@ platform :android do
     )
 
     helpers_dir = './android/app/src/main/java/com/mattermost/helpers/'
-    beta_dir = './android/app/src/main/java/com/mattermost/rnbeta/'
+    beta_dir = './android/app/src/main/java/com/tin/mobile/'
     release_dir = "./android/app/src/main/java/#{package_id.gsub '.', '/'}/"
     if release_dir != beta_dir
       unless Dir.exist?(".#{release_dir}")
@@ -899,7 +899,7 @@ platform :android do
       Dir.glob(".#{release_dir}*.java") do |item|
         find_replace_string(
             path_to_file: item[1..-1],
-            old_string: 'package com.mattermost.rnbeta;',
+            old_string: 'package com.tin.mobile;',
             new_string: "package #{package_id};"
         )
       end
@@ -907,7 +907,7 @@ platform :android do
       Dir.glob(".#{release_dir}*.kt") do |item|
         find_replace_string(
             path_to_file: item[1..-1],
-            old_string: 'package com.mattermost.rnbeta',
+            old_string: 'package com.tin.mobile',
             new_string: "package #{package_id}"
         )
       end
@@ -915,7 +915,7 @@ platform :android do
       Dir.glob('../android/app/src/main/java/com/mattermost/share/*.java') do |item|
         find_replace_string(
             path_to_file: item[1..-1],
-            old_string: 'import com.mattermost.rnbeta.MainApplication;',
+            old_string: 'import com.tin.mobile.MainApplication;',
             new_string: "import #{package_id}.MainApplication;"
         )
       end
@@ -923,7 +923,7 @@ platform :android do
       Dir.glob('../android/app/src/main/java/com/mattermost/helpers/*.java') do |item|
         find_replace_string(
             path_to_file: item[1..-1],
-            old_string: 'import com.mattermost.rnbeta.*;',
+            old_string: 'import com.tin.mobile.*;',
             new_string: "import #{package_id}.*;"
         )
       end
@@ -931,7 +931,7 @@ platform :android do
       Dir.glob('../android/app/src/main/java/com/mattermost/helpers/*.kt') do |item|
         find_replace_string(
             path_to_file: item[1..-1],
-            old_string: 'import com.mattermost.rnbeta.*',
+            old_string: 'import com.tin.mobile.*',
             new_string: "import #{package_id}.*"
         )
       end
@@ -1220,7 +1220,7 @@ def submit_to_google_play(file_path)
 
   if ENV['BETA_BUILD'] == 'true'
     pretext = '#### New Android beta published to Google Play'
-    msg = "Sign up as a beta tester [here](https://play.google.com/apps/testing/com.mattermost.rnbeta).\nDownload links:\n#{links}"
+    msg = "Sign up as a beta tester [here](https://play.google.com/apps/testing/com.tin.mobile).\nDownload links:\n#{links}"
   end
 
   send_message_to_mattermost({
