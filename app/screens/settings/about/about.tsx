@@ -33,7 +33,7 @@ import Subtitle from './subtitle';
 import Title from './title';
 import TosPrivacyContainer from './tos_privacy';
 
-const MATTERMOST_BUNDLE_IDS = ['com.mattermost.rnbeta', 'com.mattermost.rn'];
+const MATTERMOST_BUNDLE_IDS = ['com.tin.mobile', 'com.mattermost.rn'];
 
 const TABLET_EXTRA_PADDING = 20;
 

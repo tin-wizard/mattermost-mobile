@@ -1,4 +1,4 @@
-package com.mattermost.rnbeta
+package com.tin.mobile
 
 import android.app.PendingIntent
 import android.content.Context
