@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 function execute() {
-    cd fastlane && NODE_ENV=production bundle exec fastlane $1 $2
+  # BUNDLE_PATH is preserved across the bundle install -> bundle exec pair so
+  # bundler resolves gems from fastlane/vendor/bundle/ (writable) instead of the
+  # read-only /var/lib/gems/3.0.0 system location.
+  cd fastlane && NODE_ENV=production BUNDLE_PATH=vendor/bundle bundle exec fastlane $1 $2
 }
 
 function apk() {
@@ -89,9 +92,10 @@ function setup() {
         if !gem list bundler -i --version 2.5.11 > /dev/null 2>&1; then
           gem install --user-install bundler --version 2.5.11 || true
         fi
-        # --path vendor/bundle forces bundles into the working dir (fastlane/vendor/
-        # bundle/), avoiding the GH Actions ubuntu-22.04 /var/lib/gems permission
-        # errors we saw with the system-wide path.
+        # BUNDLE_PATH=vendor/bundle keeps bundle install + bundle exec using the
+        # repo-local cache. The default git source cache lives in
+        # /var/lib/gems/3.0.0/bundler/gems/ on the GH Actions ubuntu-22.04 image,
+        # which is not writable, so we redirect to vendor/bundle.
         cd fastlane && BUNDLE_PATH=vendor/bundle bundle install && cd .. || exit 1
     fi
 
