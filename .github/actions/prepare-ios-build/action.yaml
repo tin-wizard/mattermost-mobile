@@ -13,41 +13,18 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: ci/select-xcode-26
-      shell: bash
-      run: |
-        # Intune (and this action's Xcode switch) require Xcode 26.1+.
-        MIN_VERSION=26.1
-        version_ge() {
-          # True when $1 >= $2 (version-sort).
-          [ "$(printf '%s\n%s\n' "$2" "$1" | sort -V | head -1)" = "$2" ]
-        }
-
-        CURRENT_SDK=$(xcrun --sdk iphonesimulator --show-sdk-version 2>/dev/null || echo "0")
-        echo "Default Xcode SDK version: ${CURRENT_SDK}"
-
-        if version_ge "$CURRENT_SDK" "$MIN_VERSION"; then
-          echo "Default Xcode ($CURRENT_SDK) meets ${MIN_VERSION}+ requirement; nothing to do."
-          exit 0
-        fi
-
-        # Find the highest pre-installed Xcode with version >= 26.1.
-        # Scan all Xcode_*.app directories, extract the version from the name,
-        # filter >= 26.1, and select the highest. Future-proofs for Xcode 30+.
-        XCODE_26=$(for app in /Applications/Xcode_*.app; do
-          [ -d "$app" ] || continue
-          ver=$(basename "$app" .app | sed 's/^Xcode_//')
-          version_ge "$ver" "$MIN_VERSION" && echo "$app"
-        done | sort -V | tail -1 || echo "")
-        if [ -z "$XCODE_26" ]; then
-          echo "::error::No Xcode ${MIN_VERSION}+ found pre-installed on this runner and default is $CURRENT_SDK."
-          exit 1
-        fi
-
-        echo "Switching Xcode from default ($CURRENT_SDK) to ${XCODE_26##*/}"
-        sudo xcode-select -s "$XCODE_26"
-        NEW_SDK=$(xcrun --sdk iphonesimulator --show-sdk-version)
-        echo "Now using Xcode SDK version: ${NEW_SDK}"
+    - name: ci/setup-xcode
+      # Pin Xcode 26.1 deterministically. Upstream's bash self-selection
+      # loop that scanned /Applications/Xcode_*.app for a >=26.1 bundle
+      # failed on macos-15-large runners because that image ships Xcode
+      # 15/16 and no Xcode_26.app preinstalled, so it exited 1 with
+      # "No Xcode 26.1+ found" before the build could start. This
+      # third-party action downloads Xcode 26.1 (cached on the runner) and
+      # switches xcode-select -- what the proven build-tin-1 branch has
+      # been doing successfully for months.
+      uses: maxim-lobanov/setup-xcode@60606e260d2fc5762a71e64e74b2174e8ea3c8bd # v1.6.0
+      with:
+        xcode-version: '26.1'
 
     - name: ci/ensure-ios-platform-installed
       # The macos-26 runner image ships Xcode with iOS SDK headers but
