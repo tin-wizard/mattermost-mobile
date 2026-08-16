@@ -40,10 +40,29 @@ jobs:
       - name: Build Android APK
         run: npm run build:android
 
-      - name: Upload Android APK
+      - name: Generate TIN-flavored release body
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          cat > release-notes.md <<MD
+          **TIN Mobile ${TAG}** — fork of Mattermost Mobile, pre-configured to connect to your **TIN** workspace at [https://mattermost.tin.info](https://mattermost.tin.info).
+
+          For sideload / TestFlight / AltStore convenience builds, see [https://tin.info/download](https://tin.info/download).
+
+          ### Android
+          - `Mattermost-arm64-v8a.apk` — 64-bit ARM (most modern phones)
+          - `Mattermost-armeabi-v7a.apk` — 32-bit ARM (older phones)
+          - `Mattermost-x86_64.apk` — x86_64 (emulators, Chromebooks)
+
+          Pick the APK matching your device. The hosted download page auto-detects your Android arch.
+          MD
+
+      - name: Upload installers (Android APK, plus iOS .ipa if built)
         uses: softprops/action-gh-release@v2
         with:
           files: |
             android/app/build/outputs/apk/release/*.apk
+            ios/build/*.ipa
           draft: true
-          generate_release_notes: true
+          generate_release_notes: false
+          body_path: release-notes.md
