@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import CallsNative from '@mattermost/calls-native';
-import {defineMessages, type IntlShape} from 'react-intl';
+import {defineMessages} from 'react-intl';
 import {Platform} from 'react-native';
 
 // Localized strings for the Android foreground-service notification. iOS
@@ -26,7 +26,6 @@ const messages = defineMessages({
         defaultMessage: 'Call in progress',
     },
 });
-
 
 const channelConfig = {
     id: 'calls_channel',
