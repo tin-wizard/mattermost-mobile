@@ -127,22 +127,23 @@ describe('onVoIPTokenUpdated', () => {
     });
 
     // The shared expo-application mock in test/setup.ts sets applicationId
-    // to 'com.mattermost.rnbeta', so isBetaApp is true by default in tests.
-    it('stores beta-prefixed token under the default (beta) test config', async () => {
+    // to 'io.tin.mobile' (TIN's production bundle), so isBetaApp is false by
+    // default in TIN tests.
+    it('stores non-beta-prefixed token under the default (production) test config', async () => {
         const {onVoIPTokenUpdated} = loadAndInit();
         await onVoIPTokenUpdated({token: 'abc123'});
-        expect(storeVoIPDeviceToken).toHaveBeenCalledWith(`${Device.PUSH_NOTIFY_APPLE_REACT_NATIVE}beta-v2:abc123`);
+        expect(storeVoIPDeviceToken).toHaveBeenCalledWith(`${Device.PUSH_NOTIFY_APPLE_REACT_NATIVE}-v2:abc123`);
     });
 
-    it('stores non-beta-prefixed token when isBetaApp is false', async () => {
-        // Override isBetaApp to false for this test only.
+    it('stores beta-prefixed token when isBetaApp is true', async () => {
+        // Override isBetaApp to true for this test only to cover the beta path.
         let handler: ((e: VoIPTokenUpdated) => Promise<void>) | undefined;
         jest.isolateModules(() => {
             jest.doMock('@utils/general', () => {
                 const actual = jest.requireActual('@utils/general');
                 return {
                     ...actual,
-                    isBetaApp: false,
+                    isBetaApp: true,
                 };
             });
             const CallsNativeInit = require('./calls_native').default;
@@ -152,7 +153,7 @@ describe('onVoIPTokenUpdated', () => {
             handler = lastCall?.[0];
         });
         await handler!({token: 'abc123'});
-        expect(storeVoIPDeviceToken).toHaveBeenCalledWith(`${Device.PUSH_NOTIFY_APPLE_REACT_NATIVE}-v2:abc123`);
+        expect(storeVoIPDeviceToken).toHaveBeenCalledWith(`${Device.PUSH_NOTIFY_APPLE_REACT_NATIVE}beta-v2:abc123`);
     });
 });
 

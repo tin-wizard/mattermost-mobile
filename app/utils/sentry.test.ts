@@ -103,10 +103,10 @@ describe('initializeSentry function', () => {
         expect(Sentry.init).toHaveBeenCalledWith({
             dsn: 'YOUR_IOS_DSN_HERE',
             sendDefaultPii: false,
-            environment: 'beta', // Assuming isBetaApp() returns true in this test
-            tracesSampleRate: 1.0,
-            sampleRate: 1.0,
-            attachStacktrace: true, // Adjust based on your actual logic
+            environment: 'production', // isBetaApp() is false: test/setup.ts sets applicationId to 'io.tin.mobile'
+            tracesSampleRate: 0.2,
+            sampleRate: 0.2,
+            attachStacktrace: false,
             enableCaptureFailedRequests: false,
             beforeSend: expect.any(Function),
         });
