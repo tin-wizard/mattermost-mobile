@@ -16,7 +16,7 @@ permissions:
 
 env:
   RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
-  SNYK_VERSION: "1.1297.2"
+  SNYK_VERSION: "1.1305.1"
   CYCLONEDX_VERSION: "v0.27.2"
   INTUNE_ENABLED: 'false'
 
@@ -82,8 +82,10 @@ jobs:
       - name: ci/upload-ios-unsigned
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
+
           path: TIN_Connect.ipa
           name: TIN_Connect.ipa
+
 
   build-android-unsigned:
     runs-on: ubuntu-22.04
