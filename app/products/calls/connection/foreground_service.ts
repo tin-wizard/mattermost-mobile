@@ -2,7 +2,7 @@
 // See LICENSE.txt for license information.
 
 import CallsNative from '@mattermost/calls-native';
-import {defineMessages} from 'react-intl';
+import {defineMessages, type IntlShape} from 'react-intl';
 import {Platform} from 'react-native';
 
 // Localized strings for the Android foreground-service notification. iOS
@@ -11,7 +11,7 @@ import {Platform} from 'react-native';
 const messages = defineMessages({
     channelName: {
         id: 'mobile.calls.foreground_service.channel_name',
-        defaultMessage: 'Mattermost Calls',
+        defaultMessage: 'TIN Calls',
     },
     channelDescription: {
         id: 'mobile.calls.foreground_service.channel_description',
@@ -19,7 +19,7 @@ const messages = defineMessages({
     },
     title: {
         id: 'mobile.calls.foreground_service.title',
-        defaultMessage: 'Mattermost',
+        defaultMessage: 'TIN',
     },
     text: {
         id: 'mobile.calls.foreground_service.text',
@@ -27,32 +27,9 @@ const messages = defineMessages({
     },
 });
 
-const channelConfig = {
-    id: 'calls_channel',
-    name: 'TIN',
-    description: 'TIN Calls microphone while app is in the background',
-    enableVibration: false,
-};
-
-// Note: multiple calls with same arguments are a noop.
-export const foregroundServiceSetup = () => {
-    VIForegroundService.getInstance().createNotificationChannel(channelConfig);
-};
-
-export const foregroundServiceStart = async () => {
-    const notificationConfig = {
-        channelId: 'calls_channel',
-        id: 345678,
-        title: 'TIN',
-        text: 'TIN Calls Microphone',
-        icon: '',
-        button: 'Stop',
-    };
-    try {
-        await VIForegroundService.getInstance().startService(notificationConfig);
-    } catch (e) {
-        logError('Calls: Cannot start ForegroundService, error:', e);
-
+export const foregroundServiceStart = (intl: IntlShape) => {
+    if (Platform.OS !== 'android') {
+        return;
     }
     CallsNative.foregroundServiceStart({
         channelId: 'calls_channel',
