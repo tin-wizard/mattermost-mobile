@@ -8,8 +8,6 @@ import 'moment/min/locales';
 import en from '@assets/i18n/en.json';
 import {logError} from '@utils/log';
 
-import availableLanguages from './languages';
-
 const PRIMARY_LOCALE = 'en';
 const deviceLocale = getLocales()[0]?.languageTag || PRIMARY_LOCALE;
 export const DEFAULT_LOCALE = getLocaleFromLanguage(deviceLocale);
@@ -245,14 +243,13 @@ function loadChinesePolyfills() {
     require('@formatjs/intl-displaynames/locale-data/zh');
 }
 
-export function getLocaleFromLanguage(lang: string) {
-    const languageCode = lang.split('-')[0];
-    const locale = availableLanguages[lang] || availableLanguages[languageCode] || PRIMARY_LOCALE;
-    return locale;
+// TIN Connect ships in English only: the other translations still name Mattermost (matches desktop and the server).
+export function getLocaleFromLanguage(lang: string) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    return PRIMARY_LOCALE;
 }
 
-export function resetMomentLocale(locale?: string) {
-    moment.locale(locale?.split('-')[0] || DEFAULT_LOCALE.split('-')[0]);
+export function resetMomentLocale(locale?: string) { // eslint-disable-line @typescript-eslint/no-unused-vars
+    moment.locale(PRIMARY_LOCALE);
 }
 
 export function getTranslations(lang: string) {

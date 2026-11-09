@@ -1,5 +1,5 @@
 {
-    "DefaultServerUrl": "https://mattermost.tin.info",
+    "DefaultServerUrl": "https://chat.tin.info",
     "DefaultServerName": "The Intelligent Network",
     "AutoSelectServerUrl": true
 }
