@@ -239,3 +239,14 @@ jobs:
             gh release create "${{ env.RELEASE_TAG }}" --title "${{ env.RELEASE_TAG }}" --notes "Release ${{ env.RELEASE_TAG }}" "${FILES[@]}"
           fi
         working-directory: ./
+
+      # The code repo is private; staff download the Android app from this public, installers-only repo.
+      # The iOS build goes to TestFlight, so the .ipa is not published here.
+      - name: release/publish-to-public-releases-repo
+        if: ${{ hashFiles('Mattermost-unsigned.apk') != '' }}
+        env:
+          GH_TOKEN: "${{ secrets.RELEASES_TOKEN }}"
+        run: |
+          gh release create "mobile-${{ env.RELEASE_TAG }}" -R tin-wizard/tin-connect-releases --target main \
+            --title "Mobile ${{ env.RELEASE_TAG }}" --notes "TIN Connect mobile ${{ env.RELEASE_TAG }}" Mattermost-unsigned.apk
+        working-directory: ./
