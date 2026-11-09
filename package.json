@@ -183,6 +183,8 @@
     "build:ios-sim": "./scripts/build.sh ipa simulator",
     "build:ios-unsigned": "./scripts/build.sh ipa unsigned",
     "check": "npm run lint && npm run tsc",
+    "verify": "npm run check && ./scripts/precommit/i18n.sh && npm run test:ci",
+    "hooks:install": "git config core.hooksPath .githooks",
     "check-test": "npm run lint && npm run tsc && npm run test",
     "clean": "./scripts/clean.sh",
     "e2e:android": "cd detox && npm run e2e:android-build && npm run e2e:android-test && cd ..",

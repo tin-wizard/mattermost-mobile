@@ -10,8 +10,13 @@ env:
   TERM: xterm
   INTUNE_ENABLED: 'true'
 
+concurrency:
+  group: build-pr-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
+    timeout-minutes: 20
     runs-on: ubuntu-22.04
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository && (github.event.label.name == 'Build Apps for PR' || github.event.label.name == 'Build App for iOS' || github.event.label.name == 'Build App for Android') }}
     steps:
@@ -23,6 +28,7 @@ jobs:
         uses: ./.github/actions/test
 
   build-ios-pr:
+    timeout-minutes: 60
     runs-on: macos-15-large
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository && (github.event.label.name == 'Build Apps for PR' || github.event.label.name == 'Build App for iOS') }}
     needs:
@@ -77,8 +83,10 @@ jobs:
         with:
           name: ios-build-pr-${{ github.run_id }}
           path: "*.ipa"
+          retention-days: 7
 
   build-android-pr:
+    timeout-minutes: 40
     runs-on: ubuntu-22.04
     if: ${{ github.event.pull_request.head.repo.full_name == github.repository && (github.event.label.name == 'Build Apps for PR' || github.event.label.name == 'Build App for Android') }}
     needs:
@@ -124,3 +132,4 @@ jobs:
         with:
           name: android-build-pr-${{ github.run_id }}
           path: "*.apk"
+          retention-days: 7
