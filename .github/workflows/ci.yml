@@ -13,8 +13,44 @@ env:
   NODE_VERSION: 24.15.0
   TERM: xterm
 
+# A newer push to the same branch or PR cancels the older run.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  # Docs-only and workflow-only changes skip the checks (scripts/ci-changes.sh).
+  # Anything unexpected runs everything: the gates below compare with != 'false'.
+  changes:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+    outputs:
+      code: ${{ steps.classify.outputs.code }}
+    steps:
+      - name: ci/checkout-repo
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+      - name: ci/test-classifier
+        run: bash scripts/ci-changes.test.sh
+      - name: ci/classify
+        id: classify
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          if files=$(git diff --name-only "$BASE" HEAD 2>/dev/null); then :; else files='*'; fi
+          out=$(printf '%s\n' "$files" | bash scripts/ci-changes.sh) || out=''
+          if [[ "$out" != "code=true" && "$out" != "code=false" ]]; then
+            echo "::warning::ci-changes printed '$out'; running everything"
+            exit 1
+          fi
+          echo "$out" | tee -a "$GITHUB_OUTPUT"
+          echo "Classifier: \`$out\`" >> "$GITHUB_STEP_SUMMARY"
+
   lint-typecheck:
+    needs: changes
+    timeout-minutes: 10
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     runs-on: ubuntu-22.04
     steps:
       - name: ci/checkout-repo
@@ -40,6 +76,9 @@ jobs:
     # fail to run, so the E2E shard exits non-zero and drops its JUnit, silently
     # reducing the reported test count. Type-check detox on every PR so the error
     # surfaces here instead.
+    needs: changes
+    timeout-minutes: 10
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     runs-on: ubuntu-22.04
     steps:
       - name: ci/checkout-repo
@@ -59,6 +98,9 @@ jobs:
           echo "::endgroup::"
 
   test:
+    needs: changes
+    timeout-minutes: 25
+    if: ${{ !cancelled() && needs.changes.outputs.code != 'false' }}
     runs-on: ubuntu-22.04
     steps:
       - name: ci/checkout-repo
